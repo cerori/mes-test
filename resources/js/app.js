@@ -27,8 +27,10 @@ const messages = {
 
 const i18n = createI18n({
   locale: "ja",
+  fallbackLocale: "ko",
   messages,
   legacy: false,
+  globalInjection: true,
 });
 
 createInertiaApp({

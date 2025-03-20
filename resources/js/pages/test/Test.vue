@@ -7,22 +7,22 @@
       <div class="w-3xl grid md:grid-cols-2 gap-6 divide-x divide-gray-300 pb-6">
         <div class="flex flex-col gap-6 pr-6">
           <FormField v-slot="$field" name="field1" class="flex flex-col gap-1">
-            <label for="field1">{{ $t("message.field1") }}</label>
+            <label for="field1">{{ t("message.field1") }}</label>
             <InputText id="field1" type="text" />
             <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" name="field2" class="flex flex-col gap-1.5">
-            <label for="field2">{{ $t("message.field2") }}</label>
+            <label for="field2">{{ t("message.field2") }}</label>
             <InputText id="field2" type="text" />
             <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="field3">{{ $t("message.field3") }}</label>
+            <label for="field3">{{ t("message.field3") }}</label>
             <InputText id="field3" name="field3" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="field4">{{ $t("message.field4") }}</label>
+            <label for="field4">{{ t("message.field4") }}</label>
             <InputText id="field4" name="field4" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
@@ -114,12 +114,14 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { z } from "zod";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { useI18n } from "vue-i18n";
 
-const { locale } = useI18n();
+const { t, locale } = useI18n({
+  useScope: "global",
+});
 
 const selectedLocale = ref("ja");
 
