@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full flex flex-col items-center justify-center">
     <Form v-slot="$form" :initialValues @submit="onSubmit">
-      <div class="w-3xl grid md:grid-cols-2 gap-6 divide-x divide-gray-300">
+      <div class="w-3xl grid md:grid-cols-2 gap-6 divide-x divide-gray-300 pb-6">
         <div class="flex flex-col gap-6 pr-6">
           <FormField v-slot="$field" class="flex flex-col gap-1">
             <label for="field1">제품명(일본어)</label>
@@ -35,27 +35,27 @@
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
             <label for="field7">제품 종류</label>
-            <InputText id="field7" name="field8" type="text" />
+            <Select id="field7" name="field8" :options="field7" optionLabel="name" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
             <label for="field9">마지막 납품일</label>
-            <InputText id="field9" name="field9" type="text" />
+            <DatePicker showIcon id="field9" name="field9" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">마지막 납품 개수</label>
-            <InputText id="username" type="text" />
+            <label for="field10">마지막 납품 개수</label>
+            <InputText id="field10" name="field10" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">품징 분류</label>
-            <InputText id="username" type="text" />
+            <label for="field11">품질 분류</label>
+            <InputText id="field11" name="field11" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">용기 제조 국가</label>
-            <InputText id="username" type="text" />
+            <label for="field12">용기 제조 국가</label>
+            <InputText id="field12" name="field12" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
         </div>
@@ -103,13 +103,20 @@
           </FormField>
         </div>
       </div>
-      <Button type="submit" label="저장" />
+      <div class="flex justify-end">
+        <Button type="submit" label="저장" />
+      </div>
     </Form>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+
+const field7 = ref([
+  { name: "제품1", code: "1" },
+  { name: "제품2", code: "2" },
+]);
 
 const initialValues = ref({
   field1: "",
