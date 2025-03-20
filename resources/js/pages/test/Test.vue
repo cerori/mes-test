@@ -1,25 +1,28 @@
 <template>
   <div class="min-h-full flex flex-col items-center justify-center">
-    <Form v-slot="$form" :initialValues @submit="onSubmit">
+    <div class="w-full flex justify-end mb-10">
+      <Select v-model="selectedLocale" :options="optionsLocale" optionLabel="name" optionValue="code" />
+    </div>
+    <Form v-slot="$form" :initialValues :resolver="resolver" @submit="onSubmit">
       <div class="w-3xl grid md:grid-cols-2 gap-6 divide-x divide-gray-300 pb-6">
         <div class="flex flex-col gap-6 pr-6">
-          <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="field1">제품명(일본어)</label>
-            <InputText id="field1" name="field1" type="text" />
+          <FormField v-slot="$field" name="field1" class="flex flex-col gap-1">
+            <label for="field1">{{ t("message.field1") }}</label>
+            <InputText id="field1" type="text" />
+            <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{ $field.error?.message }}</Message>
+          </FormField>
+          <FormField v-slot="$field" name="field2" class="flex flex-col gap-1.5">
+            <label for="field2">{{ t("message.field2") }}</label>
+            <InputText id="field2" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
-          <FormField v-slot="$field" class="flex flex-col gap-1.5">
-            <label for="field2">제품명(영어)</label>
-            <InputText id="field2" name="field2" type="text" />
-            <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
-          </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="field3">브랜드명</label>
+            <label for="field3">{{ t("message.field3") }}</label>
             <InputText id="field3" name="field3" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="field4">표준 ID</label>
+            <label for="field4">{{ t("message.field4") }}</label>
             <InputText id="field4" name="field4" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
@@ -62,43 +65,43 @@
         <div class="flex flex-col gap-6">
           <FileUpload> </FileUpload>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">규격명(제품 정보)</label>
-            <InputText id="username" type="text" />
+            <label for="field13">규격명(제품 정보)</label>
+            <InputText id="field13" name="field13" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">가격 (세금미포함)</label>
-            <InputText id="username" type="text" />
+            <label for="field14">가격 (세금미포함)</label>
+            <InputText id="field14" name="field14" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">가격 (세금포함)</label>
-            <InputText id="username" type="text" />
+            <label for="field15">가격 (세금포함)</label>
+            <InputText id="field15" name="field15" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">케이스 수량(1박스)</label>
-            <InputText id="username" type="text" />
+            <label for="field16">케이스 수량(1박스)</label>
+            <InputText id="field16" name="field16" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">다음번 납품 예정일</label>
-            <InputText id="username" type="text" />
+            <label for="field17">다음번 납품 예정일</label>
+            <DatePicker id="field17" name="field17" showIcon />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">다음번 납품예정 수량</label>
-            <InputText id="username" type="text" />
+            <label for="field18">다음번 납품예정 수량</label>
+            <InputText id="field18" name="field18" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">상태</label>
-            <InputText id="username" type="text" />
+            <label for="field19">상태</label>
+            <InputText id="field19" name="field19" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
           <FormField v-slot="$field" class="flex flex-col gap-1">
-            <label for="username">내용물 제조 국가</label>
-            <InputText id="username" type="text" />
+            <label for="field20">내용물 제조 국가</label>
+            <InputText id="field20" name="field20" type="text" />
             <Message v-if="$field?.invalid">{{ $field.error?.message }}</Message>
           </FormField>
         </div>
@@ -111,7 +114,34 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { z } from "zod";
+import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { useI18n } from "vue-i18n";
+
+const { t, locale } = useI18n();
+
+const selectedLocale = ref("ja");
+
+watch(selectedLocale, (n) => {
+  locale.value = n;
+});
+
+const optionsLocale = ref([
+  { name: "일어", code: "ja" },
+  { name: "한국어", code: "ko" },
+]);
+
+const resolver = ref(
+  zodResolver(
+    z.object({
+      field1: z.string().min(1),
+      field2: z.string().min(1),
+      field3: z.string().min(1),
+      field4: z.string().min(1),
+    })
+  )
+);
 
 const field7 = ref([
   { name: "제품1", code: "1" },
@@ -142,6 +172,11 @@ const initialValues = ref({
 });
 
 const onSubmit = (e) => {
+  if (!e.valid) {
+    console.log(e.valid);
+    return;
+  }
+
   console.log(e);
 };
 </script>
